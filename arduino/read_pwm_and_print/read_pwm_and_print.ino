@@ -1,19 +1,32 @@
-const int pwmPin = 2; // Change this to the pin connected to Raspberry Pi PWM
-int dutyCycle = 0;
-
 #include <Servo.h>
 
-// Define Pins for ESCs
-#define ESC_PIN_1 3
-#define ESC_PIN_2 5
-#define ESC_PIN_3 6
-#define ESC_PIN_4 9
+const int pwmPin1 = 2;
+const int pwmPin2 = 4;
+const int pwmPin3 = 7;
+const int pwmPin4 = 8;
 
-// Define throttle values (adjust as needed)
-#define THROTTLE_MIN 1000
-#define THROTTLE_MAX 2000
+const int ESC_PIN_1 = 3;
+const int ESC_PIN_2 = 5;
+const int ESC_PIN_3 = 6;
+const int ESC_PIN_4 = 9;
 
-// Create servo objects for each ESC
+const int THROTTLE_MIN = 1000;
+const int THROTTLE_FULL_MAX = 2000;
+const int THROTTLE_MAX = 1500;
+
+int dutyCycle1 = 0;
+int dutyCycle2 = 0;
+int dutyCycle3 = 0;
+int dutyCycle4 = 0;
+
+int pitopwm1 = 0;
+int pitopwm2 = 0;
+int pitopwm3 = 0;
+int pitopwm4 = 0;
+
+Servo motA;
+char data;
+
 Servo esc1, esc2, esc3, esc4;
 
 
@@ -37,18 +50,55 @@ void setup() {
 }
 
 void loop() {
-  unsigned long pulseWidth = pulseIn(pwmPin, HIGH);  // Measure pulse width when signal is HIGH
+  unsigned long pulseWidth1 = pulseIn(pwmPin1, HIGH);
+  int dutyCycle1 = map(pulseWidth1, 0, 10000, 0, 100);
+  
+  unsigned long pulseWidth2 = pulseIn(pwmPin2, HIGH);
+  int dutyCycle2 = map(pulseWidth2, 0, 10000, 0, 100);
+  
+  unsigned long pulseWidth3 = pulseIn(pwmPin3, HIGH);
+  int dutyCycle3 = map(pulseWidth3, 0, 10000, 0, 100);
+  
+  unsigned long pulseWidth4 = pulseIn(pwmPin4, HIGH);
+  int dutyCycle4 = map(pulseWidth4, 0, 10000, 0, 100);
 
-  // Calculate duty cycle as a percentage
-  int dutyCycle = map(pulseWidth, 0, 10000, 0, 100);  // Assuming a typical servo range of 1000-2000 microseconds
+  // // Print the pulse width and duty cycle
+  // Serial.print("Pulse Width 1 (microseconds): ");
+  // Serial.print(pulseWidth1);
+  // Serial.print("    Duty Cycle (%): ");
+  // Serial.println(dutyCycle1);
 
-  // Print the pulse width and duty cycle
-  Serial.print("Pulse Width (microseconds): ");
-  Serial.print(pulseWidth);
-  Serial.print("    Duty Cycle (%): ");
-  Serial.println(dutyCycle);
+  // Serial.print("Pulse Width 2 (microseconds): ");
+  // Serial.print(pulseWidth2);
+  // Serial.print("    Duty Cycle (%): ");
+  // Serial.println(dutyCycle2);
 
-  delay(100);  // Delay for stability, adjust as needed
+  // Serial.print("Pulse Width 3 (microseconds): ");
+  // Serial.print(pulseWidth3);
+  // Serial.print("    Duty Cycle (%): ");
+  // Serial.println(dutyCycle3);
+
+  // Serial.print("Pulse Width 4 (microseconds): ");
+  // Serial.print(pulseWidth4);
+  // Serial.print("    Duty Cycle (%): ");
+  // Serial.println(dutyCycle4);
+
+
+  int pitopwm1 = map(dutyCycle1, 0, 100, 1000, 1300);
+  int pitopwm2 = map(dutyCycle2, 0, 100, 1000, 1300);
+  int pitopwm3 = map(dutyCycle3, 0, 100, 1000, 1300);
+  int pitopwm4 = map(dutyCycle4, 0, 100, 1000, 1300);
+
+
+
+  esc1.writeMicroseconds(pitopwm1);
+  esc2.writeMicroseconds(pitopwm2);
+  esc3.writeMicroseconds(pitopwm3);
+  esc4.writeMicroseconds(pitopwm4);
+
+
+
+  // delay(20);  // Delay for stability, adjust as needed
 }
 
 
