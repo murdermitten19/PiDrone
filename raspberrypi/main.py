@@ -1,19 +1,36 @@
 import RPi.GPIO as GPIO
-from time import sleep
+import time
 
-ledpin = 35				# PWM pin connected to LED
-GPIO.setwarnings(False)			#disable warnings
-GPIO.setmode(GPIO.BOARD)		#set pin numbering system
-GPIO.setup(ledpin,GPIO.OUT)
-pi_pwm = GPIO.PWM(ledpin,1000)		#create PWM instance with frequency
-pi_pwm.start(0)				#start PWM of required Duty Cycle 
-while True:
-    for duty in range(0,101,1):
-        pi_pwm.ChangeDutyCycle(duty) #provide duty cycle in the range 0-100
-        sleep(0.01)
-    sleep(0.5)
-    
-    for duty in range(100,-1,-1):
-        pi_pwm.ChangeDutyCycle(duty)
-        sleep(0.01)
-    sleep(0.5)
+# Set the GPIO mode and pin number
+GPIO.setmode(GPIO.BOARD)
+GPIO_PIN = 35
+
+# Set PWM parameters
+frequency = 100  # 100 Hz frequency
+duty_cycle = 0    # Start with 0% duty cycle
+
+# Setup the GPIO pin for PWM
+GPIO.setup(GPIO_PIN, GPIO.OUT)
+pwm = GPIO.PWM(GPIO_PIN, frequency)
+pwm.start(duty_cycle)
+
+try:
+    while True:
+        # Vary the duty cycle from 0 to 100 in steps of 5
+        for dc in range(0, 101, 5):
+            pwm.ChangeDutyCycle(dc)
+            print("Duty Cycle:", dc)
+            time.sleep(0.5)  # Change every 0.5 seconds
+
+        # Reverse the direction
+        for dc in range(100, -1, -5):
+            pwm.ChangeDutyCycle(dc)
+            print("Duty Cycle:", dc)
+            time.sleep(0.1)  # Change every 0.5 seconds
+
+except KeyboardInterrupt:
+    pass
+
+# Clean up
+pwm.stop()
+GPIO.cleanup()
