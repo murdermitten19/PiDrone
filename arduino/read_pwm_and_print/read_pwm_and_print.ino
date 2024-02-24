@@ -1,15 +1,5 @@
 #include <Servo.h>
 
-const int signalinfrompi1 = 2;
-const int signalinfrompi2 = 4;
-const int signalinfrompi3 = 7;
-const int signalinfrompi4 = 8;
-
-int infrompihigh1 = 0;
-int infrompihigh2 = 0;
-int infrompihigh3 = 0;
-int infrompihigh4 = 0;
-
 int infrompilow1 = 0;
 int infrompilow2 = 0;
 int infrompilow3 = 0;
@@ -36,7 +26,10 @@ char data;
 
 Servo esc1, esc2, esc3, esc4;
 
-
+const int pinfrompi1 = 2;
+const int pinfrompi2 = 4;
+const int pinfrompi3 = 7;
+const int pinfrompi4 = 8;
 
 void setup() {
 
@@ -53,65 +46,27 @@ void setup() {
   delay(2000); // Wait for 2 seconds
 
   
-  Serial.begin(10000);
+  Serial.begin(9600);
 }
 
 void loop() {
 
-  // int infrompi1 = pulseIn(signalinfrompi1, HIGH, 50000UL);
-  // int infrompi2 = pulseIn(signalinfrompi2, HIGH, 50000UL);
-  // int infrompi3 = pulseIn(signalinfrompi3, HIGH, 50000UL);
-  // int infrompi4 = pulseIn(signalinfrompi4, HIGH, 50000UL);
+  unsigned long pulsein1 = pulseIn(pinfrompi1, HIGH);
+  unsigned long pulsein2 = pulseIn(pinfrompi2, HIGH);
+  unsigned long pulsein3 = pulseIn(pinfrompi3, HIGH);
+  unsigned long pulsein4 = pulseIn(pinfrompi4, HIGH);
 
-  // int infrompi1 = pulseIn(signalinfrompi1, LOW, 50000UL);
-  // int infrompi2 = pulseIn(signalinfrompi2, LOW, 50000UL);
-  // int infrompi3 = pulseIn(signalinfrompi3, LOW, 50000UL);
-  // int infrompi4 = pulseIn(signalinfrompi4, LOW, 50000UL);
+  unsigned long mappedpulse1 = map(pulsein1, 0, 10000, 1000, 1300);
+  unsigned long mappedpulse2 = map(pulsein2, 0, 10000, 1000, 1300);
+  unsigned long mappedpulse3 = map(pulsein3, 0, 10000, 1000, 1300);
+  unsigned long mappedpulse4 = map(pulsein4, 0, 10000, 1000, 1300);
 
-
-
-
-
-
-  // pitopwm1 = map(infrompi1, 0, 10000, 1000, 1300);
-  // pitopwm1 = map(infrompi2, 0, 10000, 1000, 1300);
-  // pitopwm1 = map(infrompi3, 0, 10000, 1000, 1300);
-  // pitopwm1 = map(infrompi4, 0, 10000, 1000, 1300);
-
-
-  pitopwm1 = infrompi(signalinfrompi1);
-  pitopwm2 = infrompi(signalinfrompi2);
-  pitopwm3 = infrompi(signalinfrompi3);
-  pitopwm4 = infrompi(signalinfrompi4);
-
-  infrompihigh1 = map(pitopwm1, 0, 100, 1000, 1300);
-  infrompihigh2 = map(pitopwm2, 0, 100, 1000, 1300);
-  infrompihigh3 = map(pitopwm3, 0, 100, 1000, 1300);
-  infrompihigh4 = map(pitopwm4, 0, 100, 1000, 1300);
-
-  esc1.writeMicroseconds(infrompihigh1);
-  esc2.writeMicroseconds(infrompihigh2);
-  esc3.writeMicroseconds(infrompihigh3);
-  esc4.writeMicroseconds(infrompihigh4);
-
+  Serial.println(mappedpulse1);
+  Serial.println(mappedpulse2);
+  Serial.println(mappedpulse3);
+  Serial.println(mappedpulse4);
 
 }
-
-
-byte infrompi(byte pin)
-{
-  unsigned long highTime = pulseIn(pin, HIGH, 300UL);
-  unsigned long lowTime = pulseIn(pin, LOW, 300UL);
-
-  if (highTime == 0 || lowTime == 0)
-    return digitalRead(pin) ? 100 : 0;
-
-  return (100 * highTime) / (highTime + lowTime);
-}
-
-
-
-
 
 
 
