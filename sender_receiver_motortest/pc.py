@@ -74,8 +74,6 @@ def on_keyboard_input(event):
             motor_values[i] = 100
     send_motor_values()
 
-root.bind('<Key>', on_keyboard_input)
-
 ############################################################################
 
 
@@ -92,6 +90,10 @@ def send_motor_values():
 
 root = tk.Tk()
 root.title("Motor Sliders")
+
+
+
+root.bind('<Key>', on_keyboard_input)
 
 
 motor_value1 = 0
