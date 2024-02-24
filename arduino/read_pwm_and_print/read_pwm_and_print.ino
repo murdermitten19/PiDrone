@@ -1,40 +1,38 @@
 #include <Servo.h>
 
-const int signalinfrompi1 = 2;
-const int signalinfrompi2 = 4;
-const int signalinfrompi3 = 7;
-const int signalinfrompi4 = 8;
+const int signalinfrompi1 = 2; // Pin for signal input from Pi 1
+const int signalinfrompi2 = 4; // Pin for signal input from Pi 2
+const int signalinfrompi3 = 7; // Pin for signal input from Pi 3
+const int signalinfrompi4 = 8; // Pin for signal input from Pi 4
 
-int infrompihigh1 = 0;
-int infrompihigh2 = 0;
-int infrompihigh3 = 0;
-int infrompihigh4 = 0;
+int infrompihigh1 = 0; // High value of input from Pi 1
+int infrompihigh2 = 0; // High value of input from Pi 2
+int infrompihigh3 = 0; // High value of input from Pi 3
+int infrompihigh4 = 0; // High value of input from Pi 4
 
-int infrompilow1 = 0;
-int infrompilow2 = 0;
-int infrompilow3 = 0;
-int infrompilow4 = 0;
+int infrompilow1 = 0; // Low value of input from Pi 1
+int infrompilow2 = 0; // Low value of input from Pi 2
+int infrompilow3 = 0; // Low value of input from Pi 3
+int infrompilow4 = 0; // Low value of input from Pi 4
 
+const int ESC_PIN_1 = 3; // Pin for ESC 1
+const int ESC_PIN_2 = 5; // Pin for ESC 2
+const int ESC_PIN_3 = 6; // Pin for ESC 3
+const int ESC_PIN_4 = 9; // Pin for ESC 4
 
+const int THROTTLE_MIN = 1000; // Minimum throttle value for ESCs
+const int THROTTLE_FULL_MAX = 2000; // Maximum throttle value for full power
+const int THROTTLE_MAX = 1500; // Maximum throttle value
 
-const int ESC_PIN_1 = 3;
-const int ESC_PIN_2 = 5;
-const int ESC_PIN_3 = 6;
-const int ESC_PIN_4 = 9;
+int pitopwm1 = 0; // PWM value calculated from input of Pi 1
+int pitopwm2 = 0; // PWM value calculated from input of Pi 2
+int pitopwm3 = 0; // PWM value calculated from input of Pi 3
+int pitopwm4 = 0; // PWM value calculated from input of Pi 4
 
-const int THROTTLE_MIN = 1000;
-const int THROTTLE_FULL_MAX = 2000;
-const int THROTTLE_MAX = 1500;
+Servo motA; // Placeholder for motor A
+char data; // Placeholder for data
 
-int pitopwm1 = 0;
-int pitopwm2 = 0;
-int pitopwm3 = 0;
-int pitopwm4 = 0;
-
-Servo motA;
-char data;
-
-Servo esc1, esc2, esc3, esc4;
+Servo esc1, esc2, esc3, esc4; // ESC objects for each motor
 
 
 
@@ -98,6 +96,12 @@ void loop() {
 }
 
 
+/**
+ * Reads the input value from the specified pin and returns it as a byte.
+ * 
+ * @param pin The pin number to read from.
+ * @return The input value read from the pin as a byte.
+ */
 byte infrompi(byte pin)
 {
   unsigned long highTime = pulseIn(pin, HIGH, 300UL);
