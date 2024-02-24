@@ -38,6 +38,47 @@ def on_all_sliders_change(value):
     
     send_motor_values()
 
+
+
+############################################################################
+    
+# Noch nicht getestet
+
+def on_keyboard_input(event):
+    global motor_values
+    if event.keysym == '1':
+        motor_values[0] += 10
+    elif event.keysym == '2':
+        motor_values[1] += 10
+    elif event.keysym == '3':
+        motor_values[2] += 10
+    elif event.keysym == '4':
+        motor_values[3] += 10
+    elif event.keysym == 'w':
+        for i in range(4):
+            motor_values[i] += 10
+    elif event.keysym == 's':
+        for i in range(4):
+            motor_values[i] -= 10
+    elif event.keysym == 'a':
+        motor_values[0] -= 10
+        motor_values[2] += 10
+    elif event.keysym == 'd':
+        motor_values[0] += 10
+        motor_values[2] -= 10
+    elif event.keysym == 'Control_L':
+        for i in range(4):
+            motor_values[i] = 0
+    elif event.keysym == 'Shift_L':
+        for i in range(4):
+            motor_values[i] = 100
+    send_motor_values()
+
+root.bind('<Key>', on_keyboard_input)
+
+############################################################################
+
+
 def send_motor_values():
     global motor_value1, motor_value2, motor_value3, motor_value4
     message = f"{motor_value1},{motor_value2},{motor_value3},{motor_value4}"
