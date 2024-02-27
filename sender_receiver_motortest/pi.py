@@ -1,6 +1,6 @@
 import socket
 import RPi.GPIO as GPIO
-
+import json
 
 HOST = '0.0.0.0'
 PORT = 12345
@@ -57,6 +57,26 @@ while True:
             print("Motor 2:", pwm_values[1])
             print("Motor 3:", pwm_values[2])
             print("Motor 4:", pwm_values[3])
+
+            json_data = {
+                "pwm_value0": pwm_values[0],
+                "pwm_value1": pwm_values[1],
+                "pwm_value2": pwm_values[2],
+                "pwm_value3": pwm_values[3]
+            }
+
+            # Load the existing json file
+            with open('data.json', 'r') as file:
+                existing_data = json.load(file)
+
+            # Update the pwm values in the existing json data
+            existing_data.update(json_data)
+
+            # Save the updated json data back to the file
+            with open('data.json', 'w') as file:
+                json.dump(existing_data, file)
+
+
 
     except Exception as e:
         print("Error receiving data:", e)
