@@ -1,0 +1,23 @@
+{
+    "gyroscope": {
+        "x": 0.15,
+        "y": -0.23,
+        "z": 0.15
+    },
+    "pwm_values": {
+        "1": "",
+        "2": "",
+        "3": "",
+        "4": ""
+    },
+    "range_sensor": {
+        "sensor1": 10.5,
+        "sensor2": 8.2,
+        "sensor3": 12.7,
+        "sensor4": 6.8,
+        "sensor5": 9.3,
+        "sensor6": 11.1,
+        "sensor7": 7.6,
+        "sensor8": 10.9
+    }
+}
