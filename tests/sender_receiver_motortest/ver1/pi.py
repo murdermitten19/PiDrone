@@ -58,23 +58,23 @@ while True:
             print("Motor 3:", pwm_values[2])
             print("Motor 4:", pwm_values[3])
 
-            json_data = {
-                "pwm_value0": pwm_values[0],
-                "pwm_value1": pwm_values[1],
-                "pwm_value2": pwm_values[2],
-                "pwm_value3": pwm_values[3]
-            }
+            # json_data = {
+            #     "pwm_value0": pwm_values[0],
+            #     "pwm_value1": pwm_values[1],
+            #     "pwm_value2": pwm_values[2],
+            #     "pwm_value3": pwm_values[3]
+            # }
 
-            # Load the existing json file
-            with open('data.json', 'r') as file:
-                existing_data = json.load(file)
+            # # Load the existing json file
+            # with open('data.json', 'r') as file:
+            #     existing_data = json.load(file)
 
-            # Update the pwm values in the existing json data
-            existing_data.update(json_data)
+            # # Update the pwm values in the existing json data
+            # existing_data.update(json_data)
 
-            # Save the updated json data back to the file
-            with open('data.json', 'w') as file:
-                json.dump(existing_data, file)
+            # # Save the updated json data back to the file
+            # with open('data.json', 'w') as file:
+            #     json.dump(existing_data, file)
 
 
 
