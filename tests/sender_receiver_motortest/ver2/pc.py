@@ -69,13 +69,13 @@ label4 = ttk.Label(root, text="Motor 4")
 label5 = ttk.Label(root, text="All Motors")
 
 
-slider1 = ttk.Scale(root, from_=2, to=98, command=on_individual_slider_change1, orient=tk.HORIZONTAL)
-slider2 = ttk.Scale(root, from_=2, to=98, command=on_individual_slider_change2, orient=tk.HORIZONTAL)
-slider3 = ttk.Scale(root, from_=2, to=98, command=on_individual_slider_change3, orient=tk.HORIZONTAL)
-slider4 = ttk.Scale(root, from_=2, to=98, command=on_individual_slider_change4, orient=tk.HORIZONTAL)
+slider1 = ttk.Scale(root, from_=2, to=253, command=on_individual_slider_change1, orient=tk.HORIZONTAL)
+slider2 = ttk.Scale(root, from_=2, to=253, command=on_individual_slider_change2, orient=tk.HORIZONTAL)
+slider3 = ttk.Scale(root, from_=2, to=253, command=on_individual_slider_change3, orient=tk.HORIZONTAL)
+slider4 = ttk.Scale(root, from_=2, to=253, command=on_individual_slider_change4, orient=tk.HORIZONTAL)
 
 
-all_sliders = ttk.Scale(root, from_=2, to=98, command=on_all_sliders_change, orient=tk.HORIZONTAL)
+all_sliders = ttk.Scale(root, from_=2, to=253, command=on_all_sliders_change, orient=tk.HORIZONTAL)
 
 
 label1.grid(row=0, column=0, padx=10, pady=5)
