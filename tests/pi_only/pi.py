@@ -1,68 +1,92 @@
+import socket
 import RPi.GPIO as GPIO
 import time
 
-# GPIO Pin for the ESC
-ESC_PIN = 12
+HOST = '0.0.0.0'
+PORT = 12345
 
-# ESC Constants
-ESC_MIN = 1000  # 1ms
-ESC_MAX = 1300  # 2ms
+GPIO.setmode(GPIO.BOARD)
 
-# PWM Frequency
-PWM_FREQ = 1000  # Hz
+MOTOR_PINS_1 = 12
+# MOTOR_PINS_2 = 33
+# MOTOR_PINS_3 = 12
+# MOTOR_PINS_4 = 35
 
-# Setup GPIO
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
+GPIO.setup(MOTOR_PINS_1, GPIO.OUT)
+# GPIO.setup(MOTOR_PINS_2,GPIO.OUT)
+# GPIO.setup(MOTOR_PINS_3,GPIO.OUT)
+# GPIO.setup(MOTOR_PINS_4,GPIO.OUT)
 
-def setup_esc():
-    GPIO.setup(ESC_PIN, GPIO.OUT)
-    pwm = GPIO.PWM(ESC_PIN, PWM_FREQ)
-    pwm.start(0)  # Start with duty cycle 0
-    time.sleep(2)  # Delay for ESC to initialize
+PWM_MOTOR_1 = GPIO.PWM(MOTOR_PINS_1, 2000)
+# PWM_MOTOR_2 = GPIO.PWM(MOTOR_PINS_2,1000)
+# PWM_MOTOR_3 = GPIO.PWM(MOTOR_PINS_3,1000)
+# PWM_MOTOR_4 = GPIO.PWM(MOTOR_PINS_4,1000)
 
-def set_esc_speed(speed):
-    duty = speed_to_duty(speed)
-    pwm.ChangeDutyCycle(duty)
+PWM_MOTOR_1.start(0)
+# PWM_MOTOR_2.start(0)
+# PWM_MOTOR_3.start(0)
+# PWM_MOTOR_4.start(0)
 
-def speed_to_duty(speed):
-    # Convert speed (1000-2000) to duty cycle (0-100)
-    duty = (speed - ESC_MIN) / (ESC_MAX - ESC_MIN) * 100
-    return duty
 
-def disarm_esc():
-    pwm.stop()
 
-def stop_esc():
-    pwm.ChangeDutyCycle(0)
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_socket.bind((HOST, PORT))
+server_socket.listen()
 
-def main():
+print("Server is listening...")
+
+while True:
+    client_socket, address = server_socket.accept()
+    print(f"Connection from {address}")
+
     try:
-        setup_esc()
-
+        
+        PWM_MOTOR_1.ChangeDutyCycle(0)
+        # PWM_MOTOR_2.ChangeDutyCycle(0)
+        # PWM_MOTOR_3.ChangeDutyCycle(0)
+        # PWM_MOTOR_4.ChangeDutyCycle(0)
+        time.sleep(10)
+        
+        
+        
         while True:
-            print("Select Mode:")
-            print("1. Set Speed")
-            print("2. Stop")
-            print("3. Exit")
-
-            mode = input("Enter mode: ")
-
-            if mode == '1':
-                speed = int(input("Enter speed (1000-2000): "))
-                set_esc_speed(speed)
-            elif mode == '2':
-                stop_esc()
-            elif mode == '3':
+            received_data = client_socket.recv(1024).decode().strip()
+            if not received_data:
                 break
+            
+            values = received_data.split(',')
+            
+            if len(values) != 4:
+                print("Received invalid data format. Expected 4 values separated by comma.")
+                continue
+
             else:
-                print("Invalid mode. Try again.")
+                print(values)
+                motor_value1, motor_value2, motor_value3, motor_value4 = map(int, values)
 
-    except KeyboardInterrupt:
-        print("\nExiting program...")
-    finally:
-        disarm_esc()
-        GPIO.cleanup()
+                print("Received Motor Values (PWM %):")
+                print("Motor 1:", motor_value1)
+                print("Motor 2:", motor_value2)
+                print("Motor 3:", motor_value3)
+                print("Motor 4:", motor_value4)
 
-if __name__ == "__main__":
-    main()
+                PWM_MOTOR_1.ChangeDutyCycle(motor_value1)
+                # PWM_MOTOR_2.ChangeDutyCycle(0)
+                # PWM_MOTOR_3.ChangeDutyCycle(0)
+                # PWM_MOTOR_4.ChangeDutyCycle(0)
+
+                
+            
+
+    except Exception as e:
+        print("Error receiving data:", e)
+    
+    client_socket.close()
+
+# Stop PWM and clean up GPIO
+    PWM_MOTOR_1.stop()
+    # PWM_MOTOR_2.stop()
+    # PWM_MOTOR_3.stop()
+    # PWM_MOTOR_4.stop()
+
+    GPIO.cleanup()
