@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import ttk
 import socket
 import time
-from mpu6050 import mpu6050
 import json
 
 
@@ -183,50 +182,6 @@ def landen():
         motor_value4 = motor_value4 - 1
         send_motor_values()
         time.sleep(0.1)
-
-
-# MPU6050 Werte auslesen und drohne gerade halten
-# 1. Werte auslesen
-# 2. Drohne gerade halten
-        
-def mpu6050_werte():
-    sensor = mpu6050(0x68)
-    acceleration_data = sensor.get_accel_data()
-    gyro_data = sensor.get_gyro_data()
-    print("Acceleration Data")
-    print(f"x: {acceleration_data['x']}")
-    print(f"y: {acceleration_data['y']}")
-    print(f"z: {acceleration_data['z']}")
-    print("Gyro Data")
-    print(f"x: {gyro_data['x']}")
-    print(f"y: {gyro_data['y']}")
-    print(f"z: {gyro_data['z']}")
-    time.sleep(0.5)
-    root.after(500, mpu6050_werte)
-
-def save_gyro_data():
-    sensor = mpu6050(0x68)
-    gyro_data = sensor.get_gyro_data()
-
-    with open('gyro_data.json', 'w') as file:
-        json.dump(gyro_data, file)
-    
-    gyro_data = {
-        'x': gyro_data['x'],
-        'y': gyro_data['y'],
-        'z': gyro_data['z']
-    }
-    
-save_gyro_data()
-
-
-
-def drohne_gerade_halten():
-    # Muss noch implementiert werden
-    pass
-
-    
-
 
 
 
