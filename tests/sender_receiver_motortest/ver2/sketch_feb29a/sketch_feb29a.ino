@@ -1,70 +1,77 @@
 #include <Servo.h>
 
 
-const int signalinfrompi1 = 2; // Pin for signal input from Pi 1
-const int signalinfrompi2 = 4; // Pin for signal input from Pi 2
-const int signalinfrompi3 = 7; // Pin for signal input from Pi 3
-const int signalinfrompi4 = 8; // Pin for signal input from Pi 4
+#define MIN_PULSE_LENGTH 1000 // Minimum pulse length in µs
+#define MAX_PULSE_LENGTH 2000 // Maximum pulse length in µs
 
-const int ESC_PIN_1 = 3; // Pin for ESC 1
-const int ESC_PIN_2 = 5; // Pin for ESC 2
-const int ESC_PIN_3 = 6; // Pin for ESC 3
-const int ESC_PIN_4 = 9; // Pin for ESC 4
+Servo motA;
+char data;
 
-const int THROTTLE_MIN = 1000; // Minimum throttle value for ESCs
-const int THROTTLE_FULL_MAX = 2000; // Maximum throttle value for full power
-const int THROTTLE_MAX = 1300; // Maximum throttle value
-
-Servo motA; // Placeholder for motor A
-char data; // Placeholder for data
-
-Servo esc1, esc2, esc3, esc4; // ESC objects for each motor
 
 void setup() {
+    Serial.begin(9600);
+    
+    motA.attach(3, MIN_PULSE_LENGTH, MAX_PULSE_LENGTH);
+    motA.attach(5, MIN_PULSE_LENGTH, MAX_PULSE_LENGTH);
+    motA.attach(6, MIN_PULSE_LENGTH, MAX_PULSE_LENGTH);
+    motA.attach(9, MIN_PULSE_LENGTH, MAX_PULSE_LENGTH);
 
-  esc1.attach(ESC_PIN_1);
-  esc2.attach(ESC_PIN_2);
-  esc3.attach(ESC_PIN_3);
-  esc4.attach(ESC_PIN_4);
-  
-  // Send minimum throttle to calibrate ESCs
-  esc1.writeMicroseconds(THROTTLE_MIN);
-  esc2.writeMicroseconds(THROTTLE_MIN);
-  esc3.writeMicroseconds(THROTTLE_MIN);
-  esc4.writeMicroseconds(THROTTLE_MIN);
-  delay(5000); // Wait for 5 seconds
-
-  
-  Serial.begin(10000);
+    
+    displayInstructions();
 }
 
 void loop() {
+    if (Serial.available()) {
+        data = Serial.read();
+        switch (data) {
+            case 48 : Serial.println("Sending minimum throttle");
+                      motA.writeMicroseconds(MIN_PULSE_LENGTH);
+            break;
 
-  unsigned long infrompi1 = pulseIn(signalinfrompi1, HIGH, 500UL);
-  unsigned long infrompi2 = pulseIn(signalinfrompi2, HIGH, 500UL);
-  unsigned long infrompi3 = pulseIn(signalinfrompi3, HIGH, 500UL);
-  unsigned long infrompi4 = pulseIn(signalinfrompi4, HIGH, 500UL);
+            case 49 : Serial.println("Sending maximum throttle");
+                      motA.writeMicroseconds(MAX_PULSE_LENGTH);
+            break;
 
-  unsigned long pitopwm1 = map(infrompi1, 0, 100, 1099, 1300);
-  unsigned long pitopwm2 = map(infrompi2, 0, 100, 1099, 1300);
-  unsigned long pitopwm3 = map(infrompi3, 0, 100, 1099, 1300);
-  unsigned long pitopwm4 = map(infrompi4, 0, 100, 1099, 1300);
-
-
-  Serial.println(pitopwm1);
-  Serial.println(pitopwm2);
-  Serial.println(pitopwm3);
-  Serial.println(pitopwm4);
-
-  esc1.writeMicroseconds(pitopwm1);
-  esc2.writeMicroseconds(pitopwm2);
-  esc3.writeMicroseconds(pitopwm3);
-  esc4.writeMicroseconds(pitopwm4);
-
+            case 50 : Serial.print("Running test in 3");
+                      delay(1000);
+                      Serial.print(" 2");
+                      delay(1000);
+                      Serial.println(" 1...");
+                      delay(1000);
+                      test();
+            break;
+            case 51:
+              Serial.println("Sending 1200");
+              motA.writeMicroseconds(1200);
+              break;
+            case 52:
+              Serial.println("Sending 1050");
+              motA.writeMicroseconds(1050);
+            
+        }
+    }
 }
 
+void test()
+{
+    for (int i = MIN_PULSE_LENGTH; i <= MAX_PULSE_LENGTH; i += 1) {
+        Serial.print("Pulse length = ");
+        Serial.println(i);
+        
+        motA.writeMicroseconds(i);
+        
+        delay(25);
+    }
 
+    Serial.println("STOP");
+    motA.writeMicroseconds(MIN_PULSE_LENGTH);
+    
+}
 
-
-
-
+void displayInstructions()
+{  
+    Serial.println("READY - PLEASE SEND INSTRUCTIONS AS FOLLOWING :");
+    Serial.println("\t0 : Send min throttle");
+    Serial.println("\t1 : Send max throttle");
+    Serial.println("\t2 : Run test function\n");
+}

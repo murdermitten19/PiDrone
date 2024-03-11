@@ -4,10 +4,10 @@ import pigpio as GPIO
 HOST = '0.0.0.0'
 PORT = 12345
 
-MOTOR_1 = 12
-MOTOR_2 = 13
-MOTOR_3 = 18
-MOTOR_4 = 19
+MOTOR_1 = 18 #runterregeln
+MOTOR_2 = 12
+MOTOR_3 = 19 #runterregeln
+MOTOR_4 = 13
 
 
 PWM_MOTOR_1 = GPIO.pi()
@@ -15,10 +15,10 @@ PWM_MOTOR_2 = GPIO.pi()
 PWM_MOTOR_3 = GPIO.pi()
 PWM_MOTOR_4 = GPIO.pi()
 
-PWM_MOTOR_1.set_PWM_frequency(MOTOR_1, 10000)
-PWM_MOTOR_2.set_PWM_frequency(MOTOR_2, 10000)
-PWM_MOTOR_3.set_PWM_frequency(MOTOR_3, 10000)
-PWM_MOTOR_4.set_PWM_frequency(MOTOR_4, 10000)
+PWM_MOTOR_1.set_PWM_frequency(MOTOR_1, 400)
+PWM_MOTOR_2.set_PWM_frequency(MOTOR_2, 400)
+PWM_MOTOR_3.set_PWM_frequency(MOTOR_3, 400)
+PWM_MOTOR_4.set_PWM_frequency(MOTOR_4, 400)
 
 PWM_MOTOR_1.set_PWM_dutycycle(MOTOR_1, 0)
 PWM_MOTOR_2.set_PWM_dutycycle(MOTOR_2, 0)
