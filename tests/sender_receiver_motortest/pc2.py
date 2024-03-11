@@ -113,14 +113,10 @@ def on_key_press(event):
     global motor_value1, motor_value2, motor_value3, motor_value4
     key = event.char.lower()
     if key == '8':
-    
-        
-        
-        
-        # motor_value1 -= 3
-        # motor_value2 -= 3
-        # motor_value3 += 3
-        # motor_value4 += 3
+        motor_value1 -= 3
+        motor_value2 -= 3
+        motor_value3 += 3
+        motor_value4 += 3
     elif key == '5':
         motor_value1 += 3
         motor_value2 += 3

@@ -125,6 +125,26 @@ def send_motor_values():
     except Exception as e:
         print("Error sending data:", e)
 
+def starten():
+    global motor_value1, motor_value2, motor_value3, motor_value4
+    motor_value1 = 133
+    motor_value2 = 133
+    motor_value3 = 133
+    motor_value4 = 133
+    send_motor_values()
+    time.sleep(3)
+    reset_motor_speeds()
+
+
+def landen():
+    global motor_value1, motor_value2, motor_value3, motor_value4
+    while motor_value1 > 130:
+        motor_value1 -= 1
+        motor_value2 -= 1
+        motor_value3 -= 1
+        motor_value4 -= 1
+        send_motor_values()
+        time.sleep(1)
 
 
 
@@ -133,6 +153,13 @@ root.title("Drone Control")
 
 instructions_label = tk.Label(root, text="Use 'w', 'a', 's', 'd', '8', '4', '5', '6' keys to control the drone.")
 instructions_label.pack()
+
+start_button = tk.Button(root, text="Start", command=starten)
+start_button.pack()
+
+land_button = tk.Button(root, text="Land", command=landen)
+land_button.pack()
+
 
 reset_label = tk.Label(root, text="Press 'esc' to exit.")
 reset_label.pack()
