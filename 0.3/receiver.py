@@ -153,23 +153,44 @@ while True:
     if received_data in ['w-', 'a-', 's-', 'd-', '8-', '4-', '5-', '6-']:
         print("key released")
 
-        try:
-            if received_data in ['w-', 'a-', 's-', 'd-', '8-', '4-', '5-', '6-']:
-                while True:
-                    if Ax < 0.03 and Ax > -0.03 and Ay < 0.03 and Ay > -0.03:
-                        print("staright")
-                        continue 
+
+        if received_data in ['w-', 'a-', 's-', 'd-', '8-', '4-', '5-', '6-']:
+            while True:
+                acc_x = read_raw_data(ACCEL_XOUT)
+                acc_y = read_raw_data(ACCEL_YOUT)
+                acc_z = read_raw_data(ACCEL_ZOUT)
+
+                Ax = acc_x/16384.0 - 0.03
+                Ay = acc_y/16384.0 + 0.03
+                Az = acc_z/16384.0
+                
+                latest_received_data = client_socket.recv(1024).decode().strip()
+
+
+                if received_data not in ['w+', 'a+', 's+', 'd+', '8+', '4+', '5+', '6+', 'w-', 'a-', 's-', 'd-', '8-', '4-', '5-', '6-']:
+                    print("Ungültiges Datenformat erhalten.")
+                    continue
+                else:
+                    convert_Data(latest_received_data)
+
+
+                if Ax < 0.03 and Ax > -0.03 and Ay < 0.03 and Ay > -0.03:
+                    if latest_received_data not in ['w+', 'a+', 's+', 'd+', '8+', '4+', '5+', '6+']:
+                        print("hovering")
                     else:
+                        break
+                else:
+                    if latest_received_data not in ['w+', 'a+', 's+', 'd+', '8+', '4+', '5+', '6+']:
                         print("balancing")
-                        continue
+                    else:
+                        break     
                         
-        except:
-            print("key pressed")
 
 
 
-    # elif received_data in ['w+', 'a+', 's+', 'd+', '8+', '4+', '5+', '6+']:
-    #     print("key pressed")
+
+    elif received_data in ['w+', 'a+', 's+', 'd+', '8+', '4+', '5+', '6+']:
+        print("key pressed")
 
 
 
