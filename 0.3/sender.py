@@ -4,7 +4,7 @@ import keyboard
 import socket
 import time
 
-IP_ADDRESS = '192.168.2.148'
+IP_ADDRESS = '192.168.0.100'
 PORT = 12345
 
 

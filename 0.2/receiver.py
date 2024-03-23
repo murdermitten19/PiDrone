@@ -1,6 +1,7 @@
 import socket
 import pigpio as GPIO
 
+
 # Definieren der Host- und Portvariablen
 HOST = '0.0.0.0'
 PORT = 12345
