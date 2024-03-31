@@ -184,7 +184,7 @@ button1.grid(row=5, column=1, padx=10, pady=5)
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
-SERVER_ADDRESS = '192.168.2.148'
+SERVER_ADDRESS = '192.168.0.100'
 SERVER_PORT = 12345
 
 try:

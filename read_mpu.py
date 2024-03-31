@@ -1,94 +1,52 @@
-import socket
 import smbus
-import time
+from time import sleep
 
-# Definieren der Host- und Portvariablen
-HOST = '0.0.0.0'
-PORT = 12345
+PWR_MGMT_1   = 0x6B
+SMPLRT_DIV   = 0x19
+CONFIG       = 0x1A
+GYRO_CONFIG  = 0x1B
+INT_ENABLE   = 0x38
+ACCEL_XOUT_H = 0x3B
+ACCEL_YOUT_H = 0x3D
+ACCEL_ZOUT_H = 0x3F
+GYRO_XOUT_H  = 0x43
+GYRO_YOUT_H  = 0x45
+GYRO_ZOUT_H  = 0x47
 
-value = 0
-received_data = "w-"
-
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_socket.bind((HOST, PORT))
-server_socket.listen()
-
-print("server is listening on", HOST, PORT)
-
-MPU = smbus.SMBus(1)
-Device_Address = 0x68
-
-
-
-
-ACCEL_XOUT = 0x3B
-ACCEL_YOUT = 0x3D
-ACCEL_ZOUT = 0x3F
-GYRO_XOUT  = 0x43
-GYRO_YOUT  = 0x45
-GYRO_ZOUT  = 0x47
-
-
-
+def MPU_Init():
+        bus.write_byte_data(Device_Address, SMPLRT_DIV, 7)
+        bus.write_byte_data(Device_Address, PWR_MGMT_1, 1)
+        bus.write_byte_data(Device_Address, CONFIG, 0)
+        bus.write_byte_data(Device_Address, GYRO_CONFIG, 24)
+        bus.write_byte_data(Device_Address, INT_ENABLE, 1)
 
 def read_raw_data(addr):
-        high = MPU.read_byte_data(Device_Address, addr)
-        low = MPU.read_byte_data(Device_Address, addr)
-    
-        value = ((high << 8) | low)
-        
-        if(value > 32768):
-                value = value - 65536
+                high = bus.read_byte_data(Device_Address, addr)
+                low = bus.read_byte_data(Device_Address, addr+1)
+                value = ((high << 8) | low)
+                if(value > 32768):
+                                value = value - 65536
+                return value
 
-        time.sleep(0.02)
-        return value
-    
+bus = smbus.SMBus(1)
+Device_Address = 0x68
 
+MPU_Init()
 
-def hover():
-    read_raw_data()
-
-
-
-
-
-
-# client_socket, address = server_socket.accept()
-# print(f"Verbindung von {address}")
-
-
-"""
-FYI
-Ax = links(-)/rechts(+)
-Ay = vorne(+)/hinten(-)
-Az = nur gott weiß
-
-"""
-
-
+print (" Reading Data of Gyroscope and Accelerometer")
 
 while True:
-
-    acc_x = read_raw_data(ACCEL_XOUT)
-    acc_y = read_raw_data(ACCEL_YOUT)
-    acc_z = read_raw_data(ACCEL_ZOUT)
-
-    Ax = acc_x/16384.0 - 0.03
-    Ay = acc_y/16384.0 + 0.03
-    Az = acc_z/16384.0
-
-
-  
-    # print ("\tAx=%.2f g" %Ax, "\tAy=%.2f g" %Ay, "\tAz=%.2f g" %Az) 	
-       
-    # received_data = client_socket.recv(1024).decode().strip()
-    
-    # received_data = "w-"
-    
-    if received_data in ['w-', 'a-', 's-', 'd-', '8-', '4-', '5-', '6-'] and Ax < 0.03 and Ax > -0.03 and Ay < 0.03 and Ay > -0.03:
-       print("staright")
-    else:
-       print("tilted")
-
-
-#-0.07
+        acc_x = read_raw_data(ACCEL_XOUT_H)
+        acc_y = read_raw_data(ACCEL_YOUT_H)
+        acc_z = read_raw_data(ACCEL_ZOUT_H)
+        gyro_x = read_raw_data(GYRO_XOUT_H)
+        gyro_y = read_raw_data(GYRO_YOUT_H)
+        gyro_z = read_raw_data(GYRO_ZOUT_H)
+        Ax = acc_x/16384.0
+        Ay = acc_y/16384.0
+        Az = acc_z/16384.0
+        Gx = gyro_x/131.0
+        Gy = gyro_y/131.0
+        Gz = gyro_z/131.0
+        print ("Gx=%.2f" %Gx, u'\u00b0'+ "/s", "\tGy=%.2f" %Gy, u'\u00b0'+ "/s", "\tGz=%.2f" %Gz, u'\u00b0'+ "/s", "\tAx=%.2f g" %Ax, "\tAy=%.2f g" %Ay, "\tAz=%.2f g" %Az) 	
+        sleep(0.1)

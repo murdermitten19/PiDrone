@@ -16,7 +16,7 @@ LOWER = 127
 HIGHER = 133
 
 # Netzwerkeinstellungen
-IP_ADDRESS = '192.168.2.148'
+IP_ADDRESS = '192.168.0.100'
 PORT = 12345
 
 # Funktionen zur Steuerung der Drohne
