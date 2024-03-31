@@ -23,6 +23,7 @@ HOVER_SPEED_MOTOR4 = 136# - 2
 STARTUP_SPEED = 92
 
 
+
 value = 0
 received_data = "w-"
 
@@ -70,8 +71,9 @@ armed = False
 
 
 def read_raw_data(addr):
+        global Device_Address, MPU
         high = MPU.read_byte_data(Device_Address, addr)
-        low = MPU.read_byte_data(Device_Address, addr)
+        low = MPU.read_byte_data(Device_Address, addr+1)
     
         value = ((high << 8) | low)
         
@@ -284,7 +286,7 @@ while True:
     elif armed == True:    
         if received_data in ['w-', 'a-', 's-', 'd-', '8-', '4-', '5-', '6-']:
 
-            if Ax < 0.05 and Ax > -0.05 and Ay < 0.05 and Ay > -0.05:
+            if Ax < 0.07 and Ax > -0.07 and Ay < 0.07 and Ay > -0.07:
                 print("hovering")
                 PWM_MOTOR_1.set_PWM_dutycycle(MOTOR_1, HOVER_SPEED_MOTOR1)
                 PWM_MOTOR_2.set_PWM_dutycycle(MOTOR_2, HOVER_SPEED_MOTOR2)
@@ -293,24 +295,24 @@ while True:
 
             else:
 
-                if Ax > 0.03:
+                if Ax > 0.07:
                     print("Tilt to the right")
-                    correct_to_left()
+                    #correct_to_left()
 
 
-                elif Ax < -0.03:
+                elif Ax < -0.07:
                     print("Tilt to the left")
-                    correct_to_right()
+                    #correct_to_right()
 
 
-                if Ay > 0.03:
+                if Ay > 0.07:
                     print("Tilt to the front")
-                    correct_to_back()
+                    #correct_to_back()
 
 
-                elif Ay < -0.03:
+                elif Ay < -0.07:
                     print("Tilt to the back")
-                    correct_to_front()
+                    #correct_to_front()
 
 
         
