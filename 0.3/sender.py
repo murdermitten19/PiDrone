@@ -13,7 +13,7 @@ PORT = 12345
 root = tk.Tk()
 root.title("Key Sender")
 
-
+# root.geometry("750x250")
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((IP_ADDRESS, PORT))
@@ -66,6 +66,8 @@ def increase_speed():
     message = "increasespeed"
     s.sendall(message.encode())
 
+
+
 root.bind("<KeyPress>", key_press)
 root.bind("<KeyRelease>", key_release)
 root.bind("Button", arm_motors)
@@ -74,6 +76,7 @@ arm_motors_button = tk.Button(root, text="Arm Motors", command=arm_motors)
 stop_motors_button = tk.Button(root, text="Stop Motors", command=stop_motors)
 start_motors_button = tk.Button(root, text="Start Motors/Allow Control", command=start_motors)
 increase_speed_button = tk.Button(root, text="Increase Speed", command=increase_speed)
+
 
 label_for_control = tk.Label(root, text="Drücken Sie die Pfeiltasten, um die Drohne zu steuern.")
 
