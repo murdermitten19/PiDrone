@@ -1,5 +1,5 @@
 import socket
-import smbus
+# import smbus
 import pigpio as GPIO
 import time
 
@@ -33,15 +33,15 @@ server_socket.listen()
 
 print("server is listening on", HOST, PORT)
 
-MPU = smbus.SMBus(1)
-Device_Address = 0x68
+# MPU = smbus.SMBus(1)
+# Device_Address = 0x68
 
-ACCEL_XOUT = 0x3B
-ACCEL_YOUT = 0x3D
-ACCEL_ZOUT = 0x3F
-GYRO_XOUT  = 0x43
-GYRO_YOUT  = 0x45
-GYRO_ZOUT  = 0x47
+# ACCEL_XOUT = 0x3B
+# ACCEL_YOUT = 0x3D
+# ACCEL_ZOUT = 0x3F
+# GYRO_XOUT  = 0x43
+# GYRO_YOUT  = 0x45
+# GYRO_ZOUT  = 0x47
 
 MOTOR_1 = 18
 MOTOR_2 = 12
@@ -65,27 +65,28 @@ PWM_MOTOR_4.set_PWM_frequency(MOTOR_4, 500)
 
 armed = False
 
+Ax = 0.00
+Ay = 0.00
 
 
 
 
-
-def read_raw_data(addr):
-        global Device_Address, MPU
-        high = MPU.read_byte_data(Device_Address, addr)
-        low = MPU.read_byte_data(Device_Address, addr+1)
+# def read_raw_data(addr):
+#         global Device_Address, MPU
+#         high = MPU.read_byte_data(Device_Address, addr)
+#         low = MPU.read_byte_data(Device_Address, addr+1)
     
-        value = ((high << 8) | low)
+#         value = ((high << 8) | low)
         
-        if(value > 32768):
-                value = value - 65536
-        return value
+#         if(value > 32768):
+#                 value = value - 65536
+#         return value
     
 
 
 
-def hover():
-    read_raw_data()
+# def hover():
+#     read_raw_data()
 
 
 def convert_Data(received_data):
@@ -224,17 +225,17 @@ client_socket, address = server_socket.accept()
 
 while True:
 
-    # print ("\tAx=%.2f g" %Ax, "\tAy=%.2f g" %Ay, "\tAz=%.2f g" %Az) 	
+    # # print ("\tAx=%.2f g" %Ax, "\tAy=%.2f g" %Ay, "\tAz=%.2f g" %Az) 	
 
-    acc_x = read_raw_data(ACCEL_XOUT)
-    acc_y = read_raw_data(ACCEL_YOUT)
-    acc_z = read_raw_data(ACCEL_ZOUT)
+    # acc_x = read_raw_data(ACCEL_XOUT)
+    # acc_y = read_raw_data(ACCEL_YOUT)
+    # acc_z = read_raw_data(ACCEL_ZOUT)
 
-    Ax = acc_x/16384.0 - 0.03
-    Ay = acc_y/16384.0 + 0.03
-    Az = acc_z/16384.0
+    # Ax = acc_x/16384.0 - 0.03
+    # Ay = acc_y/16384.0 + 0.03
+    # Az = acc_z/16384.0
     
-    time.sleep(0.01)
+    # time.sleep(0.01)
 
 
     received_data = client_socket.recv(1024).decode().strip()
@@ -322,7 +323,11 @@ while True:
 
 
         elif received_data in ['w+', 'a+', 's+', 'd+', '8+', '4+', '5+', '6+']:
-            print("key pressed")
+            convert_Data(received_data)
+            PWM_MOTOR_1.set_PWM_dutycycle(MOTOR_1, MOTOR_ON_SPEED1)
+            PWM_MOTOR_2.set_PWM_dutycycle(MOTOR_2, MOTOR_ON_SPEED2)
+            PWM_MOTOR_3.set_PWM_dutycycle(MOTOR_3, MOTOR_ON_SPEED3)
+            PWM_MOTOR_4.set_PWM_dutycycle(MOTOR_4, MOTOR_ON_SPEED4)
 
 
 
