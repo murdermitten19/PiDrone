@@ -286,7 +286,7 @@ while True:
     elif armed == True:    
         if received_data in ['w-', 'a-', 's-', 'd-', '8-', '4-', '5-', '6-']:
 
-            if Ax < 0.07 and Ax > -0.07 and Ay < 0.07 and Ay > -0.07:
+            if Ax < 0.03 and Ax > -0.03 and Ay < 0.03 and Ay > -0.03:
                 print("hovering")
                 PWM_MOTOR_1.set_PWM_dutycycle(MOTOR_1, HOVER_SPEED_MOTOR1)
                 PWM_MOTOR_2.set_PWM_dutycycle(MOTOR_2, HOVER_SPEED_MOTOR2)
