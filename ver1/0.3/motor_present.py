@@ -222,7 +222,6 @@ def correct_to_back():
 
 client_socket, address = server_socket.accept()
 
-
 while True:
 
     # # print ("\tAx=%.2f g" %Ax, "\tAy=%.2f g" %Ay, "\tAz=%.2f g" %Az) 	
@@ -248,8 +247,6 @@ while True:
         continue
     else:
         convert_Data(received_data)
-
-
 
 
     """
